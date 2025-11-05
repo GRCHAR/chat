@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # MySQL数据库
+  mysql:
+    image: mysql:8.0
+    container_name: chat-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: chat_service
+      MYSQL_USER: chat_user
+      MYSQL_PASSWORD: chat_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - chat-network
+
+  # Redis缓存
+  redis:
+    image: redis:6.2-alpine
+    container_name: chat-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - chat-network
+
+  # RabbitMQ消息队列
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    container_name: chat-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - chat-network
+
+  # 聊天服务应用
+  chat-service:
+    build: .
+    container_name: chat-service
+    ports:
+      - "8080:8080"
+    environment:
+      GIN_MODE: release
+    depends_on:
+      - mysql
+      - redis
+      - rabbitmq
+    volumes:
+      - ./config.yaml:/root/config.yaml
+    restart: unless-stopped
+    networks:
+      - chat-network
+
+volumes:
+  mysql_data:
+  redis_data:
+  rabbitmq_data:
+
+networks:
+  chat-network:
+    driver: bridge

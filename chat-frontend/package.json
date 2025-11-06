@@ -1,0 +1,73 @@
+{
+  "name": "chat-frontend",
+  "version": "1.0.0",
+  "description": "Chat application frontend built with Vue3 + TypeScript",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview",
+    "electron:dev": "vite build && electron .",
+    "electron:build": "vue-tsc && vite build && electron-builder",
+    "electron:build:win": "vue-tsc && vite build && electron-builder --win",
+    "electron:build:mac": "vue-tsc && vite build && electron-builder --mac",
+    "electron:build:linux": "vue-tsc && vite build && electron-builder --linux",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "format": "prettier --write src/",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "vue": "^3.3.4",
+    "vue-router": "^4.2.4",
+    "pinia": "^2.1.6",
+    "axios": "^1.5.0",
+    "element-plus": "^2.3.12",
+    "@element-plus/icons-vue": "^2.1.0",
+    "socket.io-client": "^4.7.2",
+    "dayjs": "^1.11.9",
+    "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.0",
+    "@types/lodash-es": "^4.17.8",
+    "@vitejs/plugin-vue": "^4.3.4",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.9",
+    "vue-tsc": "^1.8.8",
+    "electron": "^25.8.1",
+    "electron-builder": "^24.6.4",
+    "vite-plugin-electron": "^0.14.0",
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "@electron-toolkit/utils": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.4.0",
+    "@typescript-eslint/parser": "^6.4.0",
+    "@vue/eslint-config-prettier": "^8.0.0",
+    "@vue/eslint-config-typescript": "^11.0.3",
+    "@vue/tsconfig": "^0.4.0",
+    "eslint": "^8.47.0",
+    "eslint-plugin-vue": "^9.17.0",
+    "prettier": "^3.0.2",
+    "sass": "^1.66.1"
+  },
+  "build": {
+    "appId": "com.chat.app",
+    "productName": "Chat Application",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "dist-electron/**/*",
+      "dist/**/*",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.social-networking"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}

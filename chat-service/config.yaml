@@ -21,7 +21,7 @@ redis:
   pool_size: 100
 
 rabbitmq:
-  url: "amqp://guest:guest@localhost:5672/"
+  url: "amqp://root:admin12345@localhost:5672/"
   exchange: "chat.exchange"
   queue: "chat.queue"
 

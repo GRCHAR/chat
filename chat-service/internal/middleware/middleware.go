@@ -3,6 +3,7 @@ package middleware
 import (
 	"chat-service/internal/config"
 	"fmt"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -19,10 +20,16 @@ type Claims struct {
 func JWTAuth(cfg *config.JWTConfig) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
-		if authHeader == "" {
+		authToken := c.Query("token")
+		log.Printf("header:%v, authToken:%v", authHeader, authToken)
+		if authHeader == "" && authToken == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "缺少认证token"})
 			c.Abort()
 			return
+		}
+
+		if authHeader == "" && authToken != "" {
+			authHeader = "Bearer " + authToken
 		}
 
 		tokenString := strings.TrimPrefix(authHeader, "Bearer ")

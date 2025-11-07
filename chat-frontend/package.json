@@ -2,7 +2,7 @@
   "name": "chat-frontend",
   "version": "1.0.0",
   "description": "Chat application frontend built with Vue3 + TypeScript",
-  "main": "dist-electron/main.js",
+  "main": "dist-electron/main.ts",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",

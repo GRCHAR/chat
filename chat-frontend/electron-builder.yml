@@ -58,4 +58,4 @@ publish:
   url: https://your-update-server.com
 
 extraMetadata:
-  main: dist-electron/main.js
+  main: dist-electron/main.ts

@@ -14,7 +14,7 @@ export function useWebSocket() {
     const authStore = useAuthStore()
     if (!authStore.token) return
     
-    const wsUrl = `ws://localhost:8080/api/ws?token=${authStore.token}`
+    const wsUrl = `ws://localhost:8080/api/v1/ws?token=${authStore.token}`
     
     try {
       socket.value = new WebSocket(wsUrl)

@@ -148,15 +148,15 @@ const filteredUsers = computed(() => {
 const fetchUsers = async () => {
   try {
     // 这里应该调用获取用户列表的API，现在模拟数据
-    // const response = await userApi.getUsers()
-    // allUsers.value = response.data.users
+    const response = await userApi.getUsers()
+    allUsers.value = response.data.users
     
     // 模拟数据
-    allUsers.value = [
-      { id: 2, username: 'user2', nickname: '用户2', email: 'user2@example.com', status: 'active', created_at: '2023-01-01', updated_at: '2023-01-01' },
-      { id: 3, username: 'user3', nickname: '用户3', email: 'user3@example.com', status: 'active', created_at: '2023-01-01', updated_at: '2023-01-01' },
-      { id: 4, username: 'user4', nickname: '用户4', email: 'user4@example.com', status: 'offline', created_at: '2023-01-01', updated_at: '2023-01-01' }
-    ]
+    // allUsers.value = [
+    //   { id: 2, username: 'user2', nickname: '用户2', email: 'user2@example.com', status: 'active', created_at: '2023-01-01', updated_at: '2023-01-01' },
+    //   { id: 3, username: 'user3', nickname: '用户3', email: 'user3@example.com', status: 'active', created_at: '2023-01-01', updated_at: '2023-01-01' },
+    //   { id: 4, username: 'user4', nickname: '用户4', email: 'user4@example.com', status: 'offline', created_at: '2023-01-01', updated_at: '2023-01-01' }
+    // ]
   } catch (error) {
     console.error('获取用户列表失败:', error)
     ElMessage.error('获取用户列表失败')

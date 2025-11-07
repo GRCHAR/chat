@@ -200,6 +200,40 @@ func (c *UserController) UpdateProfile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"user": user})
 }
 
+// 搜索用户
+func (c *UserController) SearchUsers(ctx *gin.Context) {
+	query := ctx.Query("q")
+	if query == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "搜索关键词不能为空"})
+		return
+	}
+
+	users, err := c.userService.SearchUsers(query)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "搜索用户失败"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"users": users})
+}
+
+// 根据ID获取用户
+func (c *UserController) GetUserByID(ctx *gin.Context) {
+	userID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "无效的用户ID"})
+		return
+	}
+
+	user, err := c.userService.GetUserByID(uint(userID))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "用户不存在"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"user": user})
+}
+
 // 聊天相关接口
 func (c *ChatController) GetRooms(ctx *gin.Context) {
 	userID := ctx.GetUint("user_id")
@@ -398,4 +432,44 @@ func (c *ChatController) GetRoomMembers(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"members": members})
+}
+
+// 添加成员到房间
+type AddMemberRequest struct {
+	UserID uint `json:"user_id" binding:"required"`
+}
+
+func (c *ChatController) AddMember(ctx *gin.Context) {
+	roomID, err := strconv.ParseUint(ctx.Param("id"), 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "无效的房间ID"})
+		return
+	}
+
+	var req AddMemberRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 检查房间是否存在
+	room, err := c.chatService.GetRoomByID(uint(roomID))
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "房间不存在"})
+		return
+	}
+
+	// 只有群聊才能添加成员
+	if room.Type != "group" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "只有群聊才能添加成员"})
+		return
+	}
+
+	// 添加成员
+	if err := c.chatService.JoinRoom(req.UserID, uint(roomID)); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "添加成员失败"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "成员添加成功"})
 }

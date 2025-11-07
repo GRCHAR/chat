@@ -148,11 +148,17 @@
     <!-- 创建房间对话框 -->
     <el-dialog
       v-model="showCreateRoomDialog"
-      title="新建聊天"
+      title="新建群聊"
       width="500px"
     >
       <CreateRoomForm @success="handleCreateRoomSuccess" @cancel="showCreateRoomDialog = false" />
     </el-dialog>
+    
+    <!-- 用户搜索对话框 -->
+    <UserSearchDialog
+      v-model="showUserSearchDialog"
+      @chat-created="handleChatCreated"
+    />
   </div>
 </template>
 
@@ -164,6 +170,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useChatStore } from '@/stores/chat'
 import { formatTime } from '@/utils/format'
 import CreateRoomForm from '@/components/CreateRoomForm.vue'
+import UserSearchDialog from '@/components/UserSearchDialog.vue'
 import type { ChatRoom } from '@/types/chat'
 
 const router = useRouter()
@@ -173,6 +180,7 @@ const chatStore = useChatStore()
 const messagesContainer = ref<HTMLElement>()
 const messageInput = ref('')
 const showCreateRoomDialog = ref(false)
+const showUserSearchDialog = ref(false)
 
 // 选择房间
 const selectRoom = async (room: ChatRoom) => {
@@ -219,6 +227,12 @@ const handleCommand = (command: string) => {
 const handleCreateRoomSuccess = () => {
   showCreateRoomDialog.value = false
   chatStore.fetchRooms()
+}
+
+// 私聊创建成功
+const handleChatCreated = (roomId: number) => {
+  showUserSearchDialog.value = false
+  // 房间已经在UserSearchDialog中被选中
 }
 
 // 显示房间成员

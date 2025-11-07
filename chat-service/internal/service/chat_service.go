@@ -47,6 +47,16 @@ func (s *UserService) UpdateUser(user *models.User) error {
 	return database.GetDB().Save(user).Error
 }
 
+func (s *UserService) SearchUsers(query string) ([]models.User, error) {
+	var users []models.User
+	err := database.GetDB().
+		Where("username LIKE ? OR nickname LIKE ? OR email LIKE ?", 
+			"%"+query+"%", "%"+query+"%", "%"+query+"%").
+		Limit(20).
+		Find(&users).Error
+	return users, err
+}
+
 // 聊天室相关服务
 func NewChatService() *ChatService {
 	return &ChatService{}

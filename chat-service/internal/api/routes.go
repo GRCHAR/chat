@@ -54,12 +54,14 @@ func SetupRouter(cfg *config.Config) *gin.Engine {
 		protected := v1.Group("")
 		protected.Use(middleware.JWTAuth(&cfg.JWT))
 		{
-			// 用户相关
-			users := protected.Group("/users")
-			{
-				users.GET("/profile", userController.GetProfile)
-				users.PUT("/profile", userController.UpdateProfile)
-			}
+		// 用户相关
+		users := protected.Group("/users")
+		{
+			users.GET("/profile", userController.GetProfile)
+			users.PUT("/profile", userController.UpdateProfile)
+			users.GET("/search", userController.SearchUsers)
+			users.GET("/:id", userController.GetUserByID)
+		}
 
 			// 聊天相关
 			rooms := protected.Group("/rooms")
@@ -74,6 +76,7 @@ func SetupRouter(cfg *config.Config) *gin.Engine {
 				rooms.POST("/:id/read", chatController.MarkAsRead)
 				rooms.GET("/:id/unread", chatController.GetUnreadCount)
 				rooms.GET("/:id/members", chatController.GetRoomMembers)
+				rooms.POST("/:id/members", chatController.AddMember)
 			}
 
 			// WebSocket连接

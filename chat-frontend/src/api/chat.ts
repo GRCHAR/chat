@@ -65,6 +65,11 @@ export const chatApi = {
   // 获取房间成员
   getRoomMembers: (roomId: number) => {
     return request.get<{ members: User[] }>(`/rooms/${roomId}/members`)
+  },
+  
+  // 添加成员到房间
+  addMember: (roomId: number, userId: number) => {
+    return request.post(`/rooms/${roomId}/members`, { user_id: userId })
   }
 }
 

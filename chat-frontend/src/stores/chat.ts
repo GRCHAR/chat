@@ -11,7 +11,7 @@ export const useChatStore = defineStore('chat', () => {
   const unreadCounts = ref<Record<number, number>>({})
   const isLoading = ref(false)
   
-  const { connect, disconnect, sendMessage, onMessage } = useWebSocket()
+  const { connect, disconnect, onMessage } = useWebSocket()
   
   const totalUnreadCount = computed(() => {
     return Object.values(unreadCounts.value).reduce((sum, count) => sum + count, 0)

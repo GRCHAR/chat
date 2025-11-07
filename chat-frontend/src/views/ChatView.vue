@@ -56,7 +56,7 @@
               <div class="room-last-message">{{ room.last_message?.content || '暂无消息' }}</div>
             </div>
             <div class="room-meta">
-              <div class="room-time">{{ formatTime(room.last_message?.created_at) }}</div>
+              <div class="room-time">{{ formatTime(room.last_message?.created_at || '') }}</div>
               <el-badge
                 :value="chatStore.unreadCounts[room.id] || 0"
                 :hidden="!chatStore.unreadCounts[room.id]"

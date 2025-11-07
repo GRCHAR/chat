@@ -44,7 +44,7 @@
               @click="toggleSidebar"
             >
               <el-icon>
-                <component :is="isCollapse ? 'Expand' : 'Fold'" />
+                <component :is="isCollapse ? 'expand' : 'fold'" />
               </el-icon>
             </el-button>
           </div>
@@ -74,7 +74,7 @@
                 @click="toggleTheme"
               >
                 <el-icon>
-                  <component :is="isDarkTheme ? 'Sunny' : 'Moon'" />
+                  <component :is="isDarkTheme ? 'sunny' : 'moon'" />
                 </el-icon>
               </el-button>
               
@@ -127,18 +127,13 @@ import { ElConfigProvider } from 'element-plus'
 import { useAuthStore } from '@/stores/auth'
 import { useChatStore } from '@/stores/chat'
 import { storageUtils } from '@/utils/storage'
-import { APP_CONFIG, THEME_CONFIG } from '@/config'
+import { THEME_CONFIG } from '@/config'
 import { setupGlobalErrorHandler } from '@/utils/error'
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import {
   ChatDotRound,
   User,
   ArrowDown,
-  ArrowLeft,
-  Expand,
-  Fold,
-  Sunny,
-  Moon,
   SwitchButton
 } from '@element-plus/icons-vue'
 
@@ -190,7 +185,11 @@ const menuRoutes = computed(() => {
       !route.meta?.hideInMenu && 
       route.path !== '/'
     )
-    .sort((a, b) => (a.meta?.order || 0) - (b.meta?.order || 0))
+    .sort((a, b) => {
+      const orderA = (a.meta?.order as number) || 0
+      const orderB = (b.meta?.order as number) || 0
+      return orderA - orderB
+    })
 })
 
 const breadcrumbs = computed(() => {

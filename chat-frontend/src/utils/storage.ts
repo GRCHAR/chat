@@ -1,4 +1,4 @@
-import { APP_CONFIG } from '@/config'
+import { APP_CONFIG, THEME_CONFIG } from '@/config'
 
 // 存储键名定义
 export const STORAGE_KEYS = {
@@ -220,7 +220,7 @@ class SessionStorageManager {
 }
 
 // 创建会话存储管理器实例
-export const sessionStorage = new SessionStorageManager()
+export const sessionStorageManager = new SessionStorageManager()
 
 // 快捷方法
 export const storageUtils = {
@@ -256,13 +256,13 @@ export const storageUtils = {
   },
   
   getTheme(): string {
-    return storage.get<string>(STORAGE_KEYS.THEME) || APP_CONFIG.theme.defaultTheme
+    return storage.get<string>(STORAGE_KEYS.THEME) || THEME_CONFIG.defaultTheme
   },
   
   // 清除所有用户数据
   clearUserData(): void {
     storage.remove(STORAGE_KEYS.TOKEN)
     storage.remove(STORAGE_KEYS.USER_INFO)
-    sessionStorage.clear()
+    sessionStorageManager.clear()
   }
 }

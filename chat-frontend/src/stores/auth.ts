@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
   
   const login = async (username: string, password: string) => {
     try {
-      const response = await authApi.login(username, password)
+      const response = await authApi.login({ username, password })
       const { user: userData, token: userToken } = response.data
       
       setToken(userToken)
@@ -90,16 +90,47 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
   
+  const getStoredToken = () => {
+    return localStorage.getItem('token')
+  }
+  
+  const verifyToken = async () => {
+    try {
+      await fetchUserInfo()
+      return true
+    } catch (error) {
+      clearToken()
+      return false
+    }
+  }
+  
+  const clearAuth = () => {
+    user.value = null
+    clearToken()
+  }
+  
+  const hasRole = (role: string) => {
+    return user.value?.role === role
+  }
+  
+  // 计算属性
+  const userInfo = computed(() => user.value)
+  
   return {
     user,
     token,
     isAuthenticated,
+    userInfo,
     setToken,
     setUser,
     login,
     register,
     logout,
     fetchUserInfo,
-    updateProfile
+    updateProfile,
+    getStoredToken,
+    verifyToken,
+    clearAuth,
+    hasRole
   }
 })

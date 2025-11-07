@@ -8,7 +8,7 @@ import type { Router } from 'vue-router'
  */
 export function setupRouterGuards(router: Router): void {
   // 全局前置守卫
-  router.beforeEach(async (to, from, next) => {
+  router.beforeEach(async (to, _from, next) => {
     const authStore = useAuthStore()
     
     // 检查是否需要认证
@@ -72,7 +72,7 @@ export function setupRouterGuards(router: Router): void {
   })
   
   // 全局后置守卫
-  router.afterEach((to, from) => {
+  router.afterEach((to, _from) => {
     // 设置页面标题
     const title = to.meta?.title as string
     if (title) {
@@ -95,7 +95,7 @@ export function setupRouterGuards(router: Router): void {
 /**
  * 路由元信息类型定义
  */
-export interface RouteMeta {
+export interface RouteMeta extends Record<PropertyKey, unknown> {
   // 页面标题
   title?: string
   

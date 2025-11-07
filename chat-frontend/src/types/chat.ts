@@ -1,3 +1,7 @@
+import type { User } from './user'
+
+export type { User } from './user'
+
 export interface ChatRoom {
   id: number
   name: string
@@ -54,5 +58,3 @@ export interface MessagesResponse {
   page: number
   page_size: number
 }
-
-import type { User } from './user'

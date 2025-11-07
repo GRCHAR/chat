@@ -120,7 +120,7 @@ const formRules: FormRules = {
       required: true, 
       message: '请至少选择一个成员', 
       trigger: 'change',
-      validator: (rule, value, callback) => {
+      validator: (_rule, value, callback) => {
         if (value.length === 0) {
           callback(new Error('请至少选择一个成员'))
         } else {
@@ -201,15 +201,6 @@ const getSelectedUserNames = () => {
     formData.member_ids.includes(user.id)
   )
   return selectedUsers.map(user => user.nickname).join('、')
-}
-
-// 监听房间类型变化
-const handleTypeChange = () => {
-  formData.member_ids = []
-  if (formData.type === 'single') {
-    formData.name = ''
-    formData.description = ''
-  }
 }
 
 onMounted(() => {

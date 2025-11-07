@@ -5,6 +5,7 @@ export interface User {
   email: string
   avatar?: string
   status: 'active' | 'inactive' | 'offline'
+  role?: string
   created_at: string
   updated_at: string
 }
